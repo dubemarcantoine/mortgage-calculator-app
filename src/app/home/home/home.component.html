@@ -1,0 +1,18 @@
+<div fxLayout fxLayoutAlign="center">
+  <div class="container">
+    <h1>Welcome to your online banking solution!</h1>
+
+    <p>
+      I structured the app the way I typically structure an Angular app. On landing, you have the home module where you
+      can
+      click on the
+      sub-modules (only loans), but on a real app, you would see a credit card module, online brokerage, etc. On the
+      sub-module
+      of the loans, you will be able to see the different types of loans and tools to help you pick the loans
+      (only a mortgage calculator right now).
+    </p>
+
+    <app-link-gallery [items]="linkGalleryItems">
+    </app-link-gallery>
+  </div>
+</div>

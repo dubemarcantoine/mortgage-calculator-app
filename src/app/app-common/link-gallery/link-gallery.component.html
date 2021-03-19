@@ -1,0 +1,23 @@
+<div fxLayout="row"
+     fxLayout.lt-md="column"
+     fxLayoutWrap
+     fxLayoutGap="0.5%"
+     fxLayoutAlign="left">
+  <div fxFlex="33.3%"
+       *ngFor="let item of items;">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{item.name}}</mat-card-title>
+        <mat-card-subtitle>{{item.description}}</mat-card-subtitle>
+      </mat-card-header>
+      <img mat-card-image [src]="item.imageUrl" [alt]="item.description"
+           class="card-image"/>
+      <mat-card-actions>
+        <a [routerLink]="[item.url]"
+           mat-raised-button>
+          Learn more
+        </a>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

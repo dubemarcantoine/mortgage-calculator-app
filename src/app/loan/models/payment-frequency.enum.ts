@@ -1,0 +1,9 @@
+export enum PaymentFrequency {
+  MONTHLY = 12,
+  SEMI_MONTHLY = 24,
+  BI_WEEKLY = 26,
+  ACCELERATED_BI_WEEKLY = 26,
+  WEEKLY = 52,
+  ACCELERATED_WEEKLY = 52,
+}
+

@@ -1,0 +1,33 @@
+<div fxLayout fxLayoutAlign="center">
+  <div class="container">
+    <h1>Mortgage Calculator</h1>
+
+    <div fxLayout="row"
+         fxLayout.lt-md="column"
+         fxLayoutWrap
+         fxLayoutGap="0.5%"
+         fxLayoutAlign="left">
+      <div fxFlex="50%">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Payment Plan</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <app-payment-plan-form></app-payment-plan-form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div fxFlex="50%">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Prepayment Plan</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <app-prepayment-plan-form></app-prepayment-plan-form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
