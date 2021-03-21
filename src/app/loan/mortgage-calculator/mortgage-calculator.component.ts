@@ -3,6 +3,7 @@ import {PaymentPlan} from '../models/payment-plan';
 import {PrepaymentPlan} from '../models/prepayment-plan';
 import {MortgageCalculatorService} from '../mortgage-calculator.service';
 import {take} from 'rxjs/operators';
+import {Mortgage} from '../models/mortgage';
 
 @Component({
   selector: 'app-mortgage-calculator',
@@ -11,6 +12,9 @@ import {take} from 'rxjs/operators';
 })
 export class MortgageCalculatorComponent implements OnInit {
   public canSubmit = true;
+
+  public mortgage!: Mortgage;
+  public errorMessage!: string | null;
 
   private paymentPlan!: PaymentPlan;
   private paymentPlanValid = true;
@@ -24,18 +28,18 @@ export class MortgageCalculatorComponent implements OnInit {
   }
 
   public submit(): void {
+    this.errorMessage = null;
+
     if (this.canSubmit) {
       this.canSubmit = false;
 
       this.mortgageCalculatorService.computeMortgage(this.paymentPlan, this.prepaymentPlan)
         .pipe(take(1))
         .subscribe(result => {
-          console.log(result)
-
-          this.setCanSubmit();
+          this.mortgage = result;
         }, error => {
-          console.error(error)
-
+          this.errorMessage = error;
+        }, () => {
           this.setCanSubmit();
         });
     }

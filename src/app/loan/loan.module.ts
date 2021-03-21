@@ -13,10 +13,14 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MatOptionModule} from '@angular/material/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
+import { MortgagePaymentTableComponent } from './mortgage-calculator/mortgage-payment-table/mortgage-payment-table.component';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import { MortgageSummaryTableComponent } from './mortgage-calculator/mortgage-summary-table/mortgage-summary-table.component';
 
 
 @NgModule({
-  declarations: [MortgageCalculatorComponent, MortgageHomeComponent, PaymentPlanFormComponent, PrepaymentPlanFormComponent],
+  declarations: [MortgageCalculatorComponent, MortgageHomeComponent, PaymentPlanFormComponent, PrepaymentPlanFormComponent, MortgagePaymentTableComponent, MortgageSummaryTableComponent],
   imports: [
     CommonModule,
     LoanRoutingModule,
@@ -28,7 +32,8 @@ import {MatButtonModule} from '@angular/material/button';
     MatOptionModule,
     MatSelectModule,
     MatButtonModule,
-  ]
+    MatTableModule,
+  ],
 })
 export class LoanModule {
 }

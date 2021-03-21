@@ -1,5 +1,6 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {PageNotFoundComponent} from './app-common/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {
@@ -10,10 +11,15 @@ const routes: Routes = [
     path: 'loans',
     loadChildren: () => import('./loan/loan.module').then(m => m.LoanModule),
   },
+  {
+    path: '**',
+    component: PageNotFoundComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

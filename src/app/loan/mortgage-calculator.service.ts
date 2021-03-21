@@ -68,14 +68,20 @@ export class MortgageCalculatorService {
         break;
     }
 
-    const mortgagePayments = this.getMortgagePayments(paymentPlan, prepaymentPlan, paymentPeriodInterestRate, paymentAmount);
+    const mortgagePayments = this.getMortgagePayments(
+      paymentPlan.paymentFrequency,
+      paymentPlan.mortgageAmount,
+      prepaymentPlan,
+      paymentPeriodInterestRate,
+      paymentAmount
+    );
 
     const termPaymentCount = yearlyPaymentCount * paymentPlan.term;
     const mortgage: Mortgage = {
       term: {
         numberOfPayments: mortgagePayments.length < termPaymentCount ? mortgagePayments.length : termPaymentCount,
         paymentAmount,
-        prepaymentAmount: prepaymentPlan.prepaymentAmount,
+        prepaymentAmountTotal: 0,
         principalPaymentsTotal: 0,
         interestPaymentsTotal: 0,
         total: 0,
@@ -83,7 +89,7 @@ export class MortgageCalculatorService {
       amortized: {
         numberOfPayments: mortgagePayments.length,
         paymentAmount,
-        prepaymentAmount: prepaymentPlan.prepaymentAmount,
+        prepaymentAmountTotal: 0,
         principalPaymentsTotal: 0,
         interestPaymentsTotal: 0,
         total: 0,
@@ -93,58 +99,19 @@ export class MortgageCalculatorService {
 
     mortgagePayments.forEach((payment, i) => {
       if (i < termPaymentCount) {
+        mortgage.term.prepaymentAmountTotal = this.getAmountValue(mortgage.term.prepaymentAmountTotal + payment.prepayment);
         mortgage.term.interestPaymentsTotal = this.getAmountValue(mortgage.term.interestPaymentsTotal + payment.interest);
         mortgage.term.principalPaymentsTotal = this.getAmountValue(mortgage.term.principalPaymentsTotal + payment.principal);
         mortgage.term.total = this.getAmountValue(mortgage.term.total + payment.total);
       }
 
+      mortgage.amortized.prepaymentAmountTotal = this.getAmountValue(mortgage.amortized.prepaymentAmountTotal + payment.prepayment);
       mortgage.amortized.interestPaymentsTotal = this.getAmountValue(mortgage.amortized.interestPaymentsTotal + payment.interest);
       mortgage.amortized.principalPaymentsTotal = this.getAmountValue(mortgage.amortized.principalPaymentsTotal + payment.principal);
       mortgage.amortized.total = this.getAmountValue(mortgage.amortized.total + payment.total);
     });
 
     return of(mortgage);
-  }
-
-  public getMortgagePayments(
-    paymentPlan: PaymentPlan,
-    prepaymentPlan: PrepaymentPlan,
-    paymentPeriodInterestRate: number,
-    paymentAmount: number
-  ): MortgagePayment[] {
-    const mortgagePayments: MortgagePayment[] = [];
-
-    let principal = paymentPlan.mortgageAmount;
-
-    while (principal >= 0) {
-      const paymentInterest = this.getPaymentInterest(principal, paymentPeriodInterestRate);
-
-      const mortgagePayment: MortgagePayment = {
-        total: 0,
-        interest: this.getPaymentInterest(principal, paymentPeriodInterestRate),
-        principal: this.getPaymentPrincipal(
-          paymentAmount,
-          paymentInterest,
-          paymentPlan.paymentFrequency,
-          prepaymentPlan,
-          mortgagePayments.length + 1
-        ),
-      };
-
-      mortgagePayment.total = this.getAmountValue(mortgagePayment.principal + mortgagePayment.interest);
-
-      mortgagePayments.push(mortgagePayment);
-
-      principal = this.getAmountValue(principal - mortgagePayment.principal);
-    }
-
-    let asdf = 0;
-    mortgagePayments.forEach(p => {
-      asdf = this.getAmountValue(asdf + p.principal);
-    });
-    console.log(asdf);
-
-    return mortgagePayments;
   }
 
   public shouldApplyPrepayment(paymentFrequency: PaymentFrequency, prepaymentPlan: PrepaymentPlan, paymentNumber: number): boolean {
@@ -171,17 +138,8 @@ export class MortgageCalculatorService {
   public getPaymentPrincipal(
     totalPaymentAmount: number,
     interestAmount: number,
-    paymentFrequency: PaymentFrequency,
-    prepaymentPlan: PrepaymentPlan,
-    paymentNumber: number
   ): number {
-    let amount = this.getAmountValue(totalPaymentAmount - interestAmount);
-
-    if (this.shouldApplyPrepayment(paymentFrequency, prepaymentPlan, paymentNumber)) {
-      amount = this.getAmountValue(amount + prepaymentPlan.prepaymentAmount);
-    }
-
-    return amount;
+    return this.getAmountValue(totalPaymentAmount - interestAmount);
   }
 
   public getAcceleratedWeeklyPaymentsValue(principal: number, periodInterest: number, monthlyPayments: number): number {
@@ -224,5 +182,47 @@ export class MortgageCalculatorService {
 
   private yearsToMonths(years: number): number {
     return years * 12;
+  }
+
+  private getMortgagePayments(
+    paymentFrequency: PaymentFrequency,
+    totalPrincipal: number,
+    prepaymentPlan: PrepaymentPlan,
+    paymentPeriodInterestRate: number,
+    paymentAmount: number
+  ): MortgagePayment[] {
+    const mortgagePayments: MortgagePayment[] = [];
+
+    while (totalPrincipal > 0) {
+      const interest = this.getPaymentInterest(totalPrincipal, paymentPeriodInterestRate);
+
+      let principal = this.getPaymentPrincipal(paymentAmount, interest);
+
+      let prepayment = 0;
+
+      if (principal > totalPrincipal) {
+        principal = totalPrincipal;
+      } else if (this.shouldApplyPrepayment(paymentFrequency, prepaymentPlan, mortgagePayments.length + 1)) {
+          const remainderPrincipal = this.getAmountValue(totalPrincipal - principal);
+          prepayment = prepaymentPlan.prepaymentAmount > remainderPrincipal ? remainderPrincipal : prepaymentPlan.prepaymentAmount;
+        }
+
+      principal = this.getAmountValue(principal + prepayment);
+
+      const mortgagePayment: MortgagePayment = {
+        total: 0,
+        interest,
+        principal,
+        prepayment,
+      };
+
+      mortgagePayment.total = this.getAmountValue(mortgagePayment.principal + mortgagePayment.interest);
+
+      mortgagePayments.push(mortgagePayment);
+
+      totalPrincipal = this.getAmountValue(totalPrincipal - mortgagePayment.principal);
+    }
+
+    return mortgagePayments;
   }
 }

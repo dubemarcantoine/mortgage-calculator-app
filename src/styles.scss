@@ -9,6 +9,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   padding: 10px 10px;
 }
 
-.input-full-width {
+.full-width {
   width: 100%;
+}
+
+mat-card {
+  margin-bottom: 20px;
 }

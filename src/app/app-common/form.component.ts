@@ -8,9 +8,9 @@ import {Subscription} from 'rxjs';
 export abstract class FormComponent implements OnInit, OnDestroy {
   public form: FormGroup = this.formBuilder.group({});
 
-  public formValueChangesSubscription: Subscription | null = null;
+  public formValueChangesSubscription!: Subscription;
 
-  public formStatusChangesSubscription: Subscription | null = null;
+  public formStatusChangesSubscription!: Subscription;
 
   @Output()
   public valueChangeEvent = new EventEmitter<any>();

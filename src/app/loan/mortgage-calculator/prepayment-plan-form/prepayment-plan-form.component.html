@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <mat-form-field class="input-full-width">
+  <mat-form-field class="full-width">
     <mat-label>Prepayment Amount</mat-label>
     <input matInput
            type="number"
@@ -7,7 +7,7 @@
   </mat-form-field>
 
   <mat-form-field appearance="fill"
-                  class="input-full-width">
+                  class="full-width">
     <mat-label>Payment Frequency</mat-label>
     <mat-select formControlName="prepaymentFrequency">
       <mat-option *ngFor="let prepaymentFrequencyType of prepaymentFrequencyOptions"
@@ -17,7 +17,7 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field class="input-full-width">
+  <mat-form-field class="full-width">
     <mat-label>Start With Payment</mat-label>
     <input matInput
            type="number"

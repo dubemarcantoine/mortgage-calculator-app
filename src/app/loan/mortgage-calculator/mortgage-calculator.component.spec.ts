@@ -16,6 +16,10 @@ import {PrepaymentPlan} from '../models/prepayment-plan';
 import {Observable, of} from 'rxjs';
 import {Mortgage} from '../models/mortgage';
 import {MortgageCalculatorService} from '../mortgage-calculator.service';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MortgagePaymentTableComponent} from './mortgage-payment-table/mortgage-payment-table.component';
+import {MortgageSummaryTableComponent} from './mortgage-summary-table/mortgage-summary-table.component';
 
 export class MortgageCalculatorServiceMock {
   public computeMortgage(paymentPlan: PaymentPlan, prepaymentPlan: PrepaymentPlan): Observable<Mortgage> {
@@ -33,6 +37,8 @@ describe('MortgageCalculatorComponent', () => {
         MortgageCalculatorComponent,
         PaymentPlanFormComponent,
         PrepaymentPlanFormComponent,
+        MortgagePaymentTableComponent,
+        MortgageSummaryTableComponent,
       ],
       imports: [
         MatCardModule,
@@ -42,6 +48,8 @@ describe('MortgageCalculatorComponent', () => {
         MatSelectModule,
         ReactiveFormsModule,
         NoopAnimationsModule,
+        MatTableModule,
+        MatPaginatorModule,
       ],
       providers: [
         {provide: MortgageCalculatorService, useClass: MortgageCalculatorServiceMock},
