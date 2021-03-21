@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MortgageHomeComponent } from './mortgage-home.component';
+import {AppCommonModule} from '../../app-common/app-common.module';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('MortgageHomeComponent', () => {
   let component: MortgageHomeComponent;
@@ -8,7 +10,11 @@ describe('MortgageHomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MortgageHomeComponent ]
+      declarations: [ MortgageHomeComponent ],
+      imports: [
+        AppCommonModule,
+        RouterTestingModule,
+      ]
     })
     .compileComponents();
   });
@@ -16,7 +22,6 @@ describe('MortgageHomeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(MortgageHomeComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

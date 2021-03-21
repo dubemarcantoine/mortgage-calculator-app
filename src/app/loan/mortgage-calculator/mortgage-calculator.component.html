@@ -13,7 +13,9 @@
             <mat-card-title>Payment Plan</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <app-payment-plan-form></app-payment-plan-form>
+            <app-payment-plan-form (statusChangeEvent)="onPaymentPlanStatusChange($event)"
+                                   (valueChangeEvent)="onPaymentPlanValueChange($event)">
+            </app-payment-plan-form>
           </mat-card-content>
         </mat-card>
       </div>
@@ -24,10 +26,25 @@
             <mat-card-title>Prepayment Plan</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <app-prepayment-plan-form></app-prepayment-plan-form>
+            <app-prepayment-plan-form (statusChangeEvent)="onPrepaymentPlanStatusChange($event)"
+                                      (valueChangeEvent)="onPrepaymentPlanValueChange($event)">
+            </app-prepayment-plan-form>
           </mat-card-content>
         </mat-card>
       </div>
     </div>
+
+    <mat-card>
+      <mat-card-actions>
+
+        <button mat-raised-button
+                class="submit-button"
+                [disabled]="!canSubmit"
+                (click)="submit()"
+                color="primary">
+          Calculate
+        </button>
+      </mat-card-actions>
+    </mat-card>
   </div>
 </div>

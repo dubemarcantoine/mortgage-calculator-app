@@ -6,5 +6,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .container {
   max-width: 1200px;
   width: 100%;
-  padding: 10px 10px 10px 10px;
+  padding: 10px 10px;
+}
+
+.input-full-width {
+  width: 100%;
 }

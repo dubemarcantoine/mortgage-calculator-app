@@ -1,6 +1,64 @@
-<form [formGroup]="paymentForm">
+<form [formGroup]="form">
+  <mat-form-field class="input-full-width">
+    <mat-label>Mortgage Amount</mat-label>
+    <input matInput
+           type="number"
+           formControlName="mortgageAmount"/>
+  </mat-form-field>
 
+  <mat-form-field class="input-full-width">
+    <mat-label>Interest Rate</mat-label>
+    <input matInput
+           type="number"
+           formControlName="interestRate"/>
+  </mat-form-field>
+
+  <div formGroupName="amortizationPeriod">
+    <p>Amortization Period</p>
+
+    <div fxLayout="row"
+         fxLayoutWrap
+         fxLayoutGap="0.5%"
+         fxLayoutAlign="left">
+      <div fxFlex="50%">
+        <mat-form-field class="input-full-width">
+          <mat-label>Years</mat-label>
+          <input matInput
+                 type="number"
+                 formControlName="years"/>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex="50%">
+        <mat-form-field class="input-full-width">
+          <mat-label>Months</mat-label>
+          <input matInput
+                 type="number"
+                 formControlName="months"/>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <mat-form-field appearance="fill"
+                  class="input-full-width">
+    <mat-label>Payment Frequency</mat-label>
+    <mat-select formControlName="paymentFrequency">
+      <mat-option *ngFor="let paymentFrequencyType of paymentFrequencyOptions"
+                  [value]="paymentFrequencyType.value">
+        {{paymentFrequencyType.label}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill"
+                  class="input-full-width">
+    <mat-label>Term</mat-label>
+    <mat-select formControlName="term">
+      <mat-option *ngFor="let term of termOptions"
+                  [value]="term.value">
+        {{term.label}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 </form>
-<p *ngFor="let type of PaymentFrequency.values();">
-  {{type}}
-</p>
